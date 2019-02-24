@@ -401,7 +401,9 @@ if(x11_dep.found())
 endif
 
 # i18n
-subdir('po')
+if find_program('xgettext', required : false).found()
+  subdir('po')
+endif
 
 if not meson.is_cross_build()
   subdir('tests')
