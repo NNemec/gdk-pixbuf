@@ -6,7 +6,7 @@ project('gdk-pixbuf', 'c',
           'warning_level=1',
           'c_std=c99',
         ],
-        meson_version: '>= 0.46.0')
+        meson_version: '>= 0.47.0')
 
 add_project_arguments([ '-D_POSIX_C_SOURCE=200809L', '-D_DEFAULT_SOURCE', '-D_XOPEN_SOURCE' ], language: 'c')
 
@@ -395,8 +395,8 @@ gnome = import('gnome')
 subdir('gdk-pixbuf')
 
 gdkpixbuf_xlib_inc = []
-if get_option('x11')
-  x11_dep = dependency('x11')
+x11_dep = dependency('x11', required: get_option('x11'))
+if(x11_dep.found())
   subdir('contrib/gdk-pixbuf-xlib')
 endif
 
@@ -440,7 +440,7 @@ summary = [
   '    documentation: @0@'.format(get_option('docs')),
   '        man pages: @0@'.format(get_option('man')),
   '    introspection: @0@'.format(get_option('gir')),
-  '              x11: @0@'.format(get_option('x11')),
+  '              x11: @0@'.format(x11_dep.found()),
   '  installed tests: @0@'.format(get_option('installed_tests')),
   '      relocatable: @0@'.format(get_option('relocatable')),
   '',
