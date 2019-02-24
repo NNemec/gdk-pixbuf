@@ -4,35 +4,36 @@ configure_file(input: 'version.xml.in',
                output: 'version.xml',
                configuration: version_xml)
 
-glib_prefix = dependency('glib-2.0').get_pkgconfig_variable('prefix')
-glib_docpath = join_paths(glib_prefix, 'share', 'gtk-doc', 'html')
-docpath = join_paths(gdk_pixbuf_datadir, 'gtk-doc', 'html')
-
-private_headers = [
-  'pixops',
-  'gdk-pixbuf.h',
-  'gdk-pixbuf-alias.h',
-  'gdk-pixbuf-autocleanups.h',
-  'gdk-pixbuf-buffer-queue-private.h',
-  'gdk-pixbuf-marshal.h',
-  'gdk-pixbuf-private.h',
-  'gdk-pixbuf-scaled-anim.h',
-  'gdk-pixbuf-xlib-private.h',
-  'io-ani-animation.h',
-  'io-gdip-animation.h',
-  'io-gdip-native.h',
-  'io-gdip-propertytags.h',
-  'io-gdip-utils.h',
-  'io-gif-animation.h',
-  'xpm-color-table.h',
-  'test-images.h',
-]
-
-if not get_option('x11')
-  private_headers += 'contrib'
-endif
-
 if get_option('docs')
+
+  glib_prefix = dependency('glib-2.0').get_pkgconfig_variable('prefix')
+  glib_docpath = join_paths(glib_prefix, 'share', 'gtk-doc', 'html')
+  docpath = join_paths(gdk_pixbuf_datadir, 'gtk-doc', 'html')
+
+  private_headers = [
+    'pixops',
+    'gdk-pixbuf.h',
+    'gdk-pixbuf-alias.h',
+    'gdk-pixbuf-autocleanups.h',
+    'gdk-pixbuf-buffer-queue-private.h',
+    'gdk-pixbuf-marshal.h',
+    'gdk-pixbuf-private.h',
+    'gdk-pixbuf-scaled-anim.h',
+    'gdk-pixbuf-xlib-private.h',
+    'io-ani-animation.h',
+    'io-gdip-animation.h',
+    'io-gdip-native.h',
+    'io-gdip-propertytags.h',
+    'io-gdip-utils.h',
+    'io-gif-animation.h',
+    'xpm-color-table.h',
+    'test-images.h',
+  ]
+
+  if not get_option('x11')
+    private_headers += 'contrib'
+  endif
+
   gnome.gtkdoc('gdk-pixbuf',
                main_xml: 'gdk-pixbuf.xml',
                src_dir: [
