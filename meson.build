@@ -186,7 +186,14 @@ endif
 
 # Dependencies
 gobject_dep = dependency('gobject-2.0', version: glib_req_version, fallback: ['glib', 'libgobject_dep'])
-gmodule_dep = dependency('gmodule-no-export-2.0', fallback: ['glib', 'libgmodule_dep'])
+gmodule_dep = dependency('gmodule-no-export-2.0', required: false)
+if(gmodule_dep.found())
+  gmodule_supported = gmodule_dep.get_pkgconfig_variable('gmodule_supported') == 'true'
+else
+  glib_proj = subproject('glib')
+  gmodule_dep = glib_proj.get_variable('libgmodule_dep')
+  gmodule_supported = glib_proj.get_variable('g_module_impl') != '0'
+endif
 gio_dep = dependency('gio-2.0', fallback: ['glib', 'libgio_dep'])
 
 # On non-Windows/macOS systems we always required shared-mime-info and GIO
@@ -214,8 +221,7 @@ endif
 gdk_pixbuf_deps = [ mathlib_dep, gobject_dep, gmodule_dep, gio_dep, shared_mime_dep, medialib_dep ]
 
 # Check if we can build shared modules
-build_modules = gmodule_dep.get_pkgconfig_variable('gmodule_supported') == 'true'
-gdk_pixbuf_conf.set('USE_GMODULE', build_modules)
+gdk_pixbuf_conf.set('USE_GMODULE', gmodule_supported)
 
 # Check which loaders should be built into gdk-pixbuf
 builtin_loaders = get_option('builtin_loaders').split(',')
