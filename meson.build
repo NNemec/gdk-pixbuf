@@ -57,7 +57,7 @@ gdk_pixbuf_loaderdir = join_paths(gdk_pixbuf_libdir, 'gdk-pixbuf-@0@/@1@/loaders
 
 # Dependencies
 glib_req_version = '>= 2.38.0'
-gio_dep = dependency('gio-2.0', version: glib_req_version)
+gio_dep = dependency('gio-2.0', version: glib_req_version, fallback: ['glib', 'libgio_dep'])
 
 # Configurations
 gdk_pixbuf_conf = configuration_data()
@@ -185,9 +185,9 @@ if host_machine.system() == 'darwin'
 endif
 
 # Dependencies
-gobject_dep = dependency('gobject-2.0', version: glib_req_version)
-gmodule_dep = dependency('gmodule-no-export-2.0')
-gio_dep = dependency('gio-2.0')
+gobject_dep = dependency('gobject-2.0', version: glib_req_version, fallback: ['glib', 'libgobject_dep'])
+gmodule_dep = dependency('gmodule-no-export-2.0', fallback: ['glib', 'libgmodule_dep'])
+gio_dep = dependency('gio-2.0', fallback: ['glib', 'libgio_dep'])
 
 # On non-Windows/macOS systems we always required shared-mime-info and GIO
 # shared_mime_dep = []
